@@ -4,10 +4,7 @@ import com.github.javaparser.ast.CompilationUnit;
 import verification.ct.analyze.ErrorMessage;
 import verification.ct.analyze.visitor.VariableCouldBeFinalVisitor;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class VariableCouldBeFinalRule implements Rule {
     private final List<ErrorMessage> warnings = new ArrayList<>();
@@ -17,6 +14,7 @@ public class VariableCouldBeFinalRule implements Rule {
         // Обходим дерево с помощью единого визитора
         var visitor = new VariableCouldBeFinalVisitor(warnings, modifiedFields);
         cu.accept(visitor, null);
+        visitor.performFinalChecks();
         return visitor.getWarnings();
     }
 }

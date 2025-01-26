@@ -10,12 +10,12 @@ import com.github.javaparser.ast.stmt.WhileStmt;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import verification.ct.analyze.ErrorMessage;
 
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class VariableCouldBeFinalVisitor extends VoidVisitorAdapter<Void> {
     private final List<ErrorMessage> warnings;
     private final Set<String> modifiedFields;
+    private final Map<String, ErrorMessage> fieldsToCheck = new HashMap<>();
 
     public VariableCouldBeFinalVisitor(List<ErrorMessage> warnings, Set<String> modifiedFields) {
         this.warnings = warnings;
@@ -40,7 +40,7 @@ public class VariableCouldBeFinalVisitor extends VoidVisitorAdapter<Void> {
 
             // Учитываем случаи, когда поле действительно изменяется в методах
             if (!modifiedFields.contains(fieldName)) {
-                warnings.add(new ErrorMessage(String.format("Field '%s' in class could be final.", fieldName)));
+                fieldsToCheck.put(fieldName, new ErrorMessage(String.format("Field '%s' in class could be final.", fieldName)));
             }
         });
     }
@@ -49,7 +49,24 @@ public class VariableCouldBeFinalVisitor extends VoidVisitorAdapter<Void> {
     public void visit(MethodDeclaration method, Void arg) {
         super.visit(method, arg);
 
+        // Список имен параметров метода
+        Set<String> methodParameters = new HashSet<>();
+        method.getParameters().forEach(param -> methodParameters.add(param.getNameAsString()));
+
         method.getBody().ifPresent(body -> {
+            methodParameters.forEach(param -> {
+                boolean isModified = body.findAll(AssignExpr.class).stream()
+                        .anyMatch(assignExpr -> isVariableModified(assignExpr, param));
+
+                // Добавляем предупреждения для параметров, которые не изменялись
+                if (!isModified) {
+                    warnings.add(new ErrorMessage(String.format(
+                            "Parameter '%s' in method '%s' could be final.",
+                            param, method.getNameAsString()
+                    )));
+                }
+            });
+
             body.findAll(VariableDeclarationExpr.class).forEach(varDecl -> {
                 varDecl.getVariables().forEach(variable -> {
                     String variableName = variable.getNameAsString();
@@ -126,5 +143,16 @@ public class VariableCouldBeFinalVisitor extends VoidVisitorAdapter<Void> {
                 whileStmt.getCondition().toString().contains(variableName) ||
                         whileStmt.getBody().toString().contains(variableName)
         );
+    }
+
+    public void performFinalChecks() {
+        for (String field : fieldsToCheck.keySet()) {
+            // Проверяем, если поле еще не было добавлено в modifiedFields
+            if (!modifiedFields.contains(field)) {
+                warnings.add(new ErrorMessage(String.format("Field '%s' in class could be final.", field)));
+            }
+        }
+        // После проверки очищаем временный список
+        fieldsToCheck.clear();
     }
 }

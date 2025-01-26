@@ -11,13 +11,14 @@ public class VariableCouldBeFinalTest extends CommonAnalyzerTest {
 
     VariableCouldBeFinalTest() {
         super(List.of(
-                new VariableCouldBeFinalRule()));
+                new VariableCouldBeFinalRule()
+        ));
     }
     @Test
     void testVariableCouldBeFinal() {
         List<ErrorMessage> result = analyzer.analyzeFile(getResource(PATH_RESOURCE+ "VariableCouldBeFinal.java"));
         printResults(result);
-        assertThat(result).hasSize(4);
+        assertThat(result).hasSize(5);
         assertThat(result.get(0).message()).contains("could be final");
     }
 

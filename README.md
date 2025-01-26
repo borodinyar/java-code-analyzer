@@ -35,7 +35,8 @@ public class CommonFail {
         array[0] = 9;
     }
 
-    public void mySecondMethod() {
+    public void mySecondMethod(String test, int gg) { // gg сожно сделать final
+        test = "test";
         List<Integer> L = List.of(); // Можно сделать final
         L.add(1);
 
@@ -51,10 +52,11 @@ public class CommonFail {
 ```
 ErrorMessage[message=Error in file CommonFailTest.java: Warning: Empty block found at line 10]
 ErrorMessage[message=Error in file CommonFailTest.java: Warning: 'for' statement without braces at line 12]
-ErrorMessage[message=Error in file CommonFailTest.java: Field 'regularVal' in class could be final.]
 ErrorMessage[message=Error in file CommonFailTest.java: Local variable 'b' in method 'myMethod' could be final.]
 ErrorMessage[message=Error in file CommonFailTest.java: Local variable 'array' in method 'myMethod' could be final.]
+ErrorMessage[message=Error in file CommonFailTest.java: Parameter 'gg' in method 'mySecondMethod' could be final.]
 ErrorMessage[message=Error in file CommonFailTest.java: Local variable 'L' in method 'mySecondMethod' could be final.]
+ErrorMessage[message=Error in file CommonFailTest.java: Field 'regularVal' in class could be final.]
 ```
 
 Больше примеров можно найти в [тестовых файлах](src/test/resources)

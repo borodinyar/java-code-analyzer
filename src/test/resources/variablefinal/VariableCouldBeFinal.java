@@ -2,7 +2,9 @@ import java.util.List;
 
 public class VariableCouldBeFinal {
     int field = 10; // Можно сделать final
-    void method() {
+    int anotherVal = 10;      // Переменная изменяется, её нельзя сделать final
+
+    void method(String Lol) {
         int a = 5; // Можно сделать final
         int b = 10; // Можно сделать final
         int c = 15;
@@ -11,5 +13,6 @@ public class VariableCouldBeFinal {
         List<Integer> L = List.of(); // Можно сделать final
         L.add(1);
 
+        anotherVal = 50;
     }
 }
