@@ -17,29 +17,32 @@ public class EmptyBlockTest extends CommonAnalyzerTest {
     @Test
     void testEmptyBlockPresent() {
         List<ErrorMessage> result = analyzer.analyzeFile(getResource(PATH_RESOURCE + "EmptyBlock.java"));
-        printResults(result);
         assertThat(result).hasSize(1);
-        assertThat(result.get(0).message()).contains("Empty block found");
+        assertThat(result.get(0).message()).contains("Empty block found at line 3");
+        printResults(result);
     }
 
     @Test
     void testNoEmptyBlocks() {
         List<ErrorMessage> result = analyzer.analyzeFile(getResource(PATH_RESOURCE + "NoEmptyBlock.java"));
-        printResults(result);
         assertThat(result).isEmpty();
+        printResults(result);
     }
 
     @Test
     void testNestedEmptyBlock() {
         List<ErrorMessage> result = analyzer.analyzeFile(getResource(PATH_RESOURCE + "NestedEmptyBlock.java"));
-        printResults(result);
         assertThat(result).hasSize(1);
+        assertThat(result.get(0).message()).contains("Empty block found at line 4");
+        printResults(result);
     }
 
     @Test
     void testMultipleEmptyBlocks() {
         List<ErrorMessage> result = analyzer.analyzeFile(getResource(PATH_RESOURCE + "MultipleEmptyBlocks.java"));
-        printResults(result);
         assertThat(result).hasSize(2);
+        assertThat(result.get(0).message()).contains("Empty block found at line 3");
+        assertThat(result.get(1).message()).contains("Empty block found at line 6");
+        printResults(result);
     }
 }

@@ -18,33 +18,38 @@ public class ControlFlowBracesTest extends CommonAnalyzerTest {
     void testIfWithoutBraces() {
         List<ErrorMessage> result = analyzer.analyzeFile(getResource(PATH_RESOURCE + "IfWithoutBraces.java"));
         assertThat(result).hasSize(1);
-        System.out.println(result);
+        assertThat(result.get(0).message()).contains("Warning: 'if' statement without braces");
+        printResults(result);
     }
 
     @Test
     void testIfWithBraces() {
         List<ErrorMessage> result = analyzer.analyzeFile(getResource(PATH_RESOURCE + "IfWithBraces.java"));
         assertThat(result).isEmpty();
+        printResults(result);
     }
 
     @Test
     void testForWithoutBraces() {
         List<ErrorMessage> result = analyzer.analyzeFile(getResource(PATH_RESOURCE + "ForWithoutBraces.java"));
         assertThat(result).hasSize(1);
-        System.out.println(result);
+        assertThat(result.get(0).message()).contains("Warning: 'for' statement without braces");
+        printResults(result);
     }
 
     @Test
     void testWhileWithoutBraces() {
         List<ErrorMessage> result = analyzer.analyzeFile(getResource(PATH_RESOURCE + "WhileWithoutBraces.java"));
         assertThat(result).hasSize(1);
-        System.out.println(result);
+        assertThat(result.get(0).message()).contains("Warning: 'while' statement without braces");
+        printResults(result);
     }
 
     @Test
     void testDoWhileWithoutBraces() {
         List<ErrorMessage> result = analyzer.analyzeFile(getResource(PATH_RESOURCE + "DoWhileWithoutBraces.java"));
         assertThat(result).hasSize(1);
-        System.out.println(result);
+        assertThat(result.get(0).message()).contains("Warning: 'do' statement without braces");
+        printResults(result);
     }
 }

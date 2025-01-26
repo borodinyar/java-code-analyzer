@@ -17,36 +17,42 @@ public class VariableCouldBeFinalTest extends CommonAnalyzerTest {
     @Test
     void testVariableCouldBeFinal() {
         List<ErrorMessage> result = analyzer.analyzeFile(getResource(PATH_RESOURCE+ "VariableCouldBeFinal.java"));
-        printResults(result);
         assertThat(result).hasSize(5);
-        assertThat(result.get(0).message()).contains("could be final");
+        assertThat(result.get(0).message()).contains("Parameter 'Lol' in method 'method' could be final.");
+        assertThat(result.get(1).message()).contains("Local variable 'a' in method 'method' could be final.");
+        assertThat(result.get(2).message()).contains("Local variable 'b' in method 'method' could be final.");
+        assertThat(result.get(3).message()).contains("Local variable 'L' in method 'method' could be final.");
+        assertThat(result.get(4).message()).contains("Field 'field' in class could be final.");
+        printResults(result);
     }
 
     @Test
     void testFieldModification() {
         List<ErrorMessage> result = analyzer.analyzeFile(getResource(PATH_RESOURCE+ "FieldModification.java"));
-        printResults(result);
         assertThat(result).isEmpty();
+        printResults(result);
     }
 
     @Test
     void testForLoopVariable() {
         List<ErrorMessage> result = analyzer.analyzeFile(getResource(PATH_RESOURCE+ "ForLoopVariable.java"));
-        printResults(result);
         assertThat(result).isEmpty();
+        printResults(result);
     }
 
     @Test
     void testWhileLoopVariable() {
         List<ErrorMessage> result = analyzer.analyzeFile(getResource(PATH_RESOURCE+ "WhileLoopVariable.java"));
-        printResults(result);
         assertThat(result).isEmpty();
+        printResults(result);
     }
 
     @Test
     void testImmutableVariables() {
         List<ErrorMessage> result = analyzer.analyzeFile(getResource(PATH_RESOURCE+ "ImmutableVariables.java"));
-        printResults(result);
         assertThat(result).hasSize(2);
+        assertThat(result.get(0).message()).contains("Local variable 'x' in method 'check' could be final.");
+        assertThat(result.get(1).message()).contains("Local variable 's' in method 'check' could be final.");
+        printResults(result);
     }
 }
